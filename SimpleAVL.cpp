@@ -114,9 +114,9 @@ AvlNode<T>* insert(AvlNode<T>* p, U&& k)
     if (!p) 
         return new AvlNode<T>(std::forward<U>(k));
     if (k < p->data)
-        p->left = insert(p->left, k);
+        p->left = insert(p->left, std::forward<U>(k));
     else if (p->data < k)
-        p->right = insert(p->right, k);
+        p->right = insert(p->right, std::forward<U>(k));
     else
         return p;
 
