@@ -22,6 +22,11 @@ struct AvlNode
         , right(nullptr)
         , height(1)
     {}
+    ~AvlNode()
+    {
+        delete left;
+        delete right;
+    }
 };
 
 
@@ -33,10 +38,10 @@ AvlNode<T>* find(AvlNode<T>* tree, const T& value)
 
     if (tree->data < value)
         return find(tree->right, value);
-    else if (value < tree->data)
+    if (value < tree->data)
         return find(tree->left, value);
-    else
-        return tree;
+
+    return tree;
 }
 
 template<typename T>
@@ -132,7 +137,7 @@ AvlNode<T>* findmin(AvlNode<T>* p) // search for a node with a minimum key in th
 template<typename T>
 AvlNode<T>* removemin(AvlNode<T>* p) // removing a node with a minimal key from the tree p
 {
-    if (p->left == 0)
+    if (p->left == nullptr)
         return p->right;
     p->left = removemin(p->left);
     return balance(p);
@@ -141,7 +146,7 @@ AvlNode<T>* removemin(AvlNode<T>* p) // removing a node with a minimal key from 
 template<typename T>
 AvlNode<T>* remove(AvlNode<T>* p, const T& k) // removing key k from the tree p
 {
-    if (!p) return 0;
+    if (!p) return nullptr;
     if (k < p->data)
         p->left = remove(p->left, k);
     else if (p->data < k)
@@ -150,6 +155,8 @@ AvlNode<T>* remove(AvlNode<T>* p, const T& k) // removing key k from the tree p
     {
         auto q = p->left;
         auto r = p->right;
+        p->left = nullptr;
+        p->right = nullptr;
         delete p;
         if (!r) return q;
         p = findmin(r);
